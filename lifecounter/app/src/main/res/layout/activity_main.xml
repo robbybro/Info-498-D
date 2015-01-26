@@ -22,7 +22,7 @@
                 android:layout_alignParentStart="true" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="-5"
                 android:id="@+id/p1minus5"
@@ -31,7 +31,7 @@
                 android:layout_alignParentStart="true" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="-"
                 android:id="@+id/p1minus1"
@@ -50,7 +50,7 @@
                 android:layout_toEndOf="@+id/p1minus1" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="+"
                 android:id="@+id/p1plus1"
@@ -59,7 +59,7 @@
                 android:layout_toEndOf="@+id/p1minus1" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="+5"
                 android:id="@+id/p1plus5"
@@ -88,7 +88,7 @@
                 android:layout_alignParentStart="true" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="-5"
                 android:id="@+id/p2minus5"
@@ -97,7 +97,7 @@
                 android:layout_alignParentStart="true" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="-"
                 android:id="@+id/p2minus1"
@@ -116,7 +116,7 @@
                 android:layout_toEndOf="@+id/p2minus1" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="+"
                 android:id="@+id/p2plus1"
@@ -125,7 +125,7 @@
                 android:layout_toEndOf="@+id/p2minus1" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="+5"
                 android:id="@+id/p2plus5"
@@ -156,7 +156,7 @@
                 android:layout_alignParentStart="true" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="-5"
                 android:id="@+id/p3minus5"
@@ -165,7 +165,7 @@
                 android:layout_alignParentStart="true" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="-"
                 android:id="@+id/p3minus1"
@@ -184,7 +184,7 @@
                 android:layout_toEndOf="@+id/p3minus1" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="+"
                 android:id="@+id/p3plus1"
@@ -193,7 +193,7 @@
                 android:layout_toEndOf="@+id/p3minus1" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="+5"
                 android:id="@+id/p3plus5"
@@ -224,7 +224,7 @@
                 android:layout_alignParentStart="true" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="-5"
                 android:id="@+id/p4minus5"
@@ -233,7 +233,7 @@
                 android:layout_alignParentStart="true" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="-"
                 android:id="@+id/p4minus1"
@@ -252,7 +252,7 @@
                 android:layout_toEndOf="@+id/p4minus1" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="+"
                 android:id="@+id/p4plus1"
@@ -261,7 +261,7 @@
                 android:layout_toEndOf="@+id/p4minus1" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="+5"
                 android:id="@+id/p4plus5"
