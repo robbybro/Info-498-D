@@ -104,7 +104,7 @@ public class TopicDetailActivity extends ActionBarActivity {
 
         // Math
         ArrayList<Question> temp = new ArrayList<Question>();
-        temp.add(new Question("What is 1 + 1", new String[]{"1", "2", "3", "69"}, 2));
+        temp.add(new Question("What is 1 + 1", new String[]{"1", "2", "3", "69"}, 1));
         temp.add(new Question("What is the answer to life, the universe, and everything?", new String[]{"42", "that's not a math question...", "it kind of is", "2"}, 0));
         temp.add(new Question("What is the sum of the edges and corners of a quadrilateral?", new String[]{"b", "0", "8", "9006"}, 2));
         questions.put("Math", temp);
