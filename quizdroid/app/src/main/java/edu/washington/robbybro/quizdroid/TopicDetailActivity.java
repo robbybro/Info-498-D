@@ -1,13 +1,20 @@
 package edu.washington.robbybro.quizdroid;
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -18,6 +25,11 @@ import java.util.Map;
 public class TopicDetailActivity extends ActionBarActivity {
 
     private String topic;
+    private int questionCount;
+    private ArrayList<Question> questions;
+    private int numCorrect;
+    private String guess;
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,31 +38,39 @@ public class TopicDetailActivity extends ActionBarActivity {
 
         // Get the Intent that opened this activity
         Intent launchedMe = getIntent();
-        String timestamp = launchedMe.getStringExtra("timestamp");  // get data that was passed from first activity
         topic = launchedMe.getStringExtra("topic");
-        TextView title = (TextView) findViewById(R.id.topic_title);
+        final TextView title = (TextView) findViewById(R.id.topic_title);
         title.setText(topic);
+        // quiz just started
+        questionCount = 0;
 
-        TextView description = (TextView) findViewById(R.id.topic_description);
+        final TextView description = (TextView) findViewById(R.id.topic_description);
         description.setText(getTopicDetail(topic));
 
-        TextView question_count = (TextView) findViewById(R.id.question_count);
+        final TextView question_count = (TextView) findViewById(R.id.question_count);
         question_count.setText(getString(R.string.num_questions, getQuestionCount(topic)));
 
-        Button btn_begin = (Button) findViewById(R.id.btn_begin);
+        // set up fragments
+        final Fragment questionFragment = new QuestionFragment();
+        final Fragment answerFragment = new AnswerFragment();
+        fragmentManager = getFragmentManager();
+
+        final Button btn_begin = (Button) findViewById(R.id.btn_begin);
         btn_begin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("quiz", "Starting quiz " + topic);
-                Intent nextActivity = new Intent(TopicDetailActivity.this, AskQuestionActivity.class);
+                // load questions into global variable
+                questions = getQuestionsForTopic(topic);
 
-                //Gather quiz questions
-                ArrayList<Question> questions = getQuestionsForTopic(topic);
-                nextActivity.putExtra("questions", questions);
-                nextActivity.putExtra("numCorrect", 0);
-                nextActivity.putExtra("numQuestions", questions.size());
-                nextActivity.putExtra("topic", topic);
-                startActivity(nextActivity);
+                // hide everything from main activity
+                title.setVisibility(v.INVISIBLE);
+                description.setVisibility(v.INVISIBLE);
+                question_count.setVisibility(v.INVISIBLE);
+                btn_begin.setVisibility(v.INVISIBLE);
+                // start Question Fragment up
+                fragmentManager.beginTransaction().replace(R.id.content_frame, new QuestionFragment()).commit();
+
             }
         });
     }
@@ -91,12 +111,16 @@ public class TopicDetailActivity extends ActionBarActivity {
         }
     }
 
-    private int getQuestionCount(String topic){
+    public int getQuestionCount(String topic){
         return getQuestionsForTopic(topic).size();
     }
 
-    private ArrayList<Question> getQuestionsForTopic(String topic){
+    public ArrayList<Question> getQuestionsForTopic(String topic){
         return getQuestions().get(topic);
+    }
+
+    public String getTopic() {
+        return this.topic;
     }
 
     private Map<String, ArrayList<Question>> getQuestions(){
@@ -124,4 +148,181 @@ public class TopicDetailActivity extends ActionBarActivity {
         questions.put("Marvel Super Heroes", temp);
         return questions;
     }
+
+    public class QuestionFragment extends Fragment {
+        public  QuestionFragment newInstance() {
+            QuestionFragment fragment = new QuestionFragment();
+            Bundle args = new Bundle();
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        public QuestionFragment() {
+            // Required empty public constructor
+        }
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            if (getArguments() != null) {
+
+            }
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            // Inflate the layout for this fragment
+            final View rootView = inflater.inflate(R.layout.fragment_question, container, false);
+
+            TextView questionText = (TextView) rootView.findViewById(R.id.question);
+            RadioButton a1 = (RadioButton) rootView.findViewById(R.id.choice1);
+            RadioButton a2 = (RadioButton) rootView.findViewById(R.id.choice2);
+            RadioButton a3 = (RadioButton) rootView.findViewById(R.id.choice3);
+            RadioButton a4 = (RadioButton) rootView.findViewById(R.id.choice4);
+            final RadioGroup choicesGroup = (RadioGroup) findViewById(R.id.choicesGroup);
+
+
+
+            final Button submit = (Button) rootView.findViewById(R.id.submit_btn);
+            submit.setVisibility(View.INVISIBLE);
+            submit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // guess = (String) ((RadioButton) findViewById(choicesGroup.getCheckedRadioButtonId())).getText();
+                    fragmentManager.beginTransaction().replace(R.id.content_frame, new AnswerFragment()).commit();
+
+                }
+            });
+
+
+            Question q = questions.get(questionCount);
+            String[] choices = q.getAnswers();
+
+            // select a radio button
+            View.OnClickListener selectAnswer = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Log.i("quizdroid", "radio button checked: " );
+                    submit.setVisibility(View.VISIBLE);
+                }
+            };
+
+
+
+            questionText.setText(q.getQuestion());
+
+            //Buttons
+            a1.setText(choices[0]);
+            a1.setOnClickListener(selectAnswer);
+
+            a2.setOnClickListener(selectAnswer);
+            a2.setText(choices[1]);
+
+            a3.setOnClickListener(selectAnswer);
+            a3.setText(choices[2]);
+
+            a4.setOnClickListener(selectAnswer);
+            a4.setText(choices[3]);
+
+
+            return rootView;
+        }
+
+
+        @Override
+        public void onAttach(Activity activity) {
+            super.onAttach(activity);
+            try {
+
+            } catch (ClassCastException e) {
+                throw new ClassCastException(activity.toString()
+                        + " must implement OnFragmentInteractionListener");
+            }
+        }
+
+        @Override
+        public void onDetach() {
+            super.onDetach();
+        }
+    }
+
+
+    public class AnswerFragment extends Fragment {
+
+        public  AnswerFragment newInstance() {
+            AnswerFragment fragment = new AnswerFragment();
+            return fragment;
+        }
+
+        public AnswerFragment() {
+            // Required empty public constructor
+        }
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+
+
+            // Inflate the answer fragment layout
+            final View rootView = inflater.inflate(R.layout.fragment_answer, container, false);
+
+            Question q = questions.get(questionCount);
+
+            String[] choices = q.getAnswers();
+
+            TextView correctAnswer = (TextView) findViewById(R.id.correctAnswer);
+            correctAnswer.setText(q.getCorrectAnswer());
+
+            TextView yourAnswer = (TextView) findViewById(R.id.yourAnswer);
+            yourAnswer.setText(guess);
+
+            TextView correctCount = (TextView) findViewById(R.id.correctCount);
+            correctCount.setText(getString(R.string.correct_count_text, numCorrect, q.getAnswers().length));
+
+            Button next_btn = (Button) findViewById(R.id.moveOn_btn);
+            final boolean moreQuestions = (questions.size() > questionCount);
+            next_btn.setText((moreQuestions) ? "Next" : "Finish");
+            next_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (moreQuestions){
+                        questionCount++;
+                        fragmentManager.beginTransaction().replace(R.id.content_frame, new QuestionFragment()).commit();
+
+                    } else {
+                        Intent topic = new Intent(getActivity(), SelectTopicActivity.class);
+                        startActivity(topic);
+                    }
+                    finish();
+                }
+            });
+
+            return rootView;
+        }
+
+        @Override
+        public void onAttach(Activity activity) {
+            super.onAttach(activity);
+            try {
+            } catch (ClassCastException e) {
+                throw new ClassCastException(activity.toString()
+                        + " must implement OnFragmentInteractionListener");
+            }
+        }
+
+        @Override
+        public void onDetach() {
+            super.onDetach();
+        }
+    }
+
+
+
 }

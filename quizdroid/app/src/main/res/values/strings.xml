@@ -14,5 +14,7 @@
     <string name="correct_count_text">You have %1$d out of %2$d correct</string>
     <string name="emptyString">unset</string>
     <string name="submit">Submit</string>
+    <string name="title_activity_question_answer">QuestionAnswer</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

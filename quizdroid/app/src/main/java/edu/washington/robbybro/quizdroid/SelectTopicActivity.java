@@ -23,6 +23,7 @@ public class SelectTopicActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_topics);
+
         ArrayAdapter<String> topicsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, topics);
         topics.add("Math");
         topics.add("Physics");
@@ -65,5 +66,4 @@ public class SelectTopicActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 }

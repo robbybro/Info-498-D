@@ -1,5 +1,7 @@
 package edu.washington.robbybro.quizdroid;
 
+import android.util.Log;
+
 import java.io.Serializable;
 
 /**
@@ -25,6 +27,7 @@ public class Question implements Serializable {
     }
 
     public String getCorrectAnswer(){
+        Log.i("quiz", this.answers[this.correct]);
         return this.answers[this.correct];
     }
 
