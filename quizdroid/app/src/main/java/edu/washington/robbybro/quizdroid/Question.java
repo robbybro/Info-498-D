@@ -31,7 +31,7 @@ public class Question implements Serializable {
         return this.answers[this.correct];
     }
 
-    public boolean isCorrect(int index){
-        return index == correct;
+    public boolean isCorrect(int guess){
+        return guess == correct;
     }
 }
