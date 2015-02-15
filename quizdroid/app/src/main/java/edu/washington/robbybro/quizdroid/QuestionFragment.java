@@ -13,17 +13,22 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.util.Arrays;
+
 
 public class QuestionFragment extends Fragment {
     private static final String ARG_PARAM1 = "question";
+
     private Question question;
     private TopicDetailActivity topicDetailActivity;
 
-
-    public static  QuestionFragment newInstance(Question q) {
+    public static QuestionFragment newInstance(Question question) {
         QuestionFragment fragment = new QuestionFragment();
         Bundle args = new Bundle();
+        args.putSerializable(ARG_PARAM1, question);
         fragment.setArguments(args);
+        Log.i("quiz", "Question: " + question.getQuestion());
+        Log.i("quiz", "Answers: " + Arrays.toString(question.getAnswers()));
         return fragment;
     }
 
@@ -40,55 +45,57 @@ public class QuestionFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        final View rootView = inflater.inflate(R.layout.fragment_question, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        //Set question text
+        final View view = inflater.inflate(R.layout.fragment_question, container, false);
 
-        TextView questionText = (TextView) rootView.findViewById(R.id.question);
-        RadioButton a1 = (RadioButton) rootView.findViewById(R.id.choice1);
-        RadioButton a2 = (RadioButton) rootView.findViewById(R.id.choice2);
-        RadioButton a3 = (RadioButton) rootView.findViewById(R.id.choice3);
-        RadioButton a4 = (RadioButton) rootView.findViewById(R.id.choice4);
-        final RadioGroup choicesGroup = (RadioGroup) rootView.findViewById(R.id.choicesGroup);
-        final Button submit = (Button) rootView.findViewById(R.id.submit_btn);
+        TextView questionTextView = (TextView) view.findViewById(R.id.question);
+        questionTextView.setText(question.getQuestion());
 
-        // select a radio button
-        View.OnClickListener selectAnswer = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                submit.setVisibility(View.VISIBLE);
-            }
-        };
+        String[] choices = question.getAnswers();
 
+        //Submit button
+        Button submit = (Button) view.findViewById(R.id.submit_btn);
         submit.setVisibility(View.INVISIBLE);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                View radioButtonView = choicesGroup.findViewById(choicesGroup.getCheckedRadioButtonId());
-                topicDetailActivity.showAnswer(choicesGroup.indexOfChild(radioButtonView));
-
+                //Check to see if answer was correct
+                RadioGroup rg = (RadioGroup) view.findViewById(R.id.choicesGroup);
+                View rb = rg.findViewById(rg.getCheckedRadioButtonId());
+                topicDetailActivity.showAnswer(rg.indexOfChild(rb));
             }
         });
 
-        String[] choices = question.getAnswers();
+        //Choices onclick listener
+        View.OnClickListener selectAnswer = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Button submit = (Button) view.findViewById(R.id.submit_btn);
+                submit.setVisibility(View.VISIBLE);
+            }
+        };
 
         //Buttons
+        RadioButton a1 = (RadioButton) view.findViewById(R.id.choice1);
         a1.setText(choices[0]);
         a1.setOnClickListener(selectAnswer);
 
+        RadioButton a2 = (RadioButton) view.findViewById(R.id.choice2);
         a2.setOnClickListener(selectAnswer);
         a2.setText(choices[1]);
 
+        RadioButton a3 = (RadioButton) view.findViewById(R.id.choice3);
         a3.setOnClickListener(selectAnswer);
         a3.setText(choices[2]);
 
+        RadioButton a4 = (RadioButton) view.findViewById(R.id.choice4);
         a4.setOnClickListener(selectAnswer);
         a4.setText(choices[3]);
 
-
-        return rootView;
+        return view;
     }
-
 
     @Override
     public void onAttach(Activity activity) {
@@ -100,4 +107,6 @@ public class QuestionFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
+
+
 }

@@ -17,9 +17,9 @@ import java.util.Map;
 public class TopicDetailActivity extends ActionBarActivity {
 
     private ArrayList<Question> questions;
-    private int questionCount;
+    private Question currentQuestion;
     private int numCorrect;
-    public int guess;
+    public int numQuestions;
     private FragmentManager fragmentManager;
 
     @Override
@@ -30,29 +30,39 @@ public class TopicDetailActivity extends ActionBarActivity {
         // Get the Intent that opened this activity
         Intent launchedMe = getIntent();
         final String topic = launchedMe.getStringExtra("topic");
-        final TextView title = (TextView) findViewById(R.id.topic_title);
-        title.setText(topic);
-        // quiz just started
-        questionCount = 0;
+        setTitle(topic);
 
+
+        questions = getQuestionsForTopic(topic);
+        numQuestions = questions.size();
         fragmentManager = getFragmentManager();
-        FragmentTransaction fragtrans = fragmentManager.beginTransaction();
-        TopicOverviewFragment topicDetailFragment = TopicOverviewFragment.newInstance(topic, questions.size());
+
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        TopicOverviewFragment topicDetailFragment = TopicOverviewFragment.newInstance(topic, numQuestions);
+        fragmentTransaction.replace(R.id.content_frame, topicDetailFragment);
+        fragmentTransaction.commit();
     }
 
     public void showNextQuestion() {
+        currentQuestion = questions.remove(0);
+
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        QuestionFragment questionFragment = QuestionFragment.newInstance(questions.get(questionCount));
+        fragmentTransaction.setCustomAnimations(R.animator.slide_in_left, R.animator.slide_out_left);
+
+        QuestionFragment questionFragment = QuestionFragment.newInstance(currentQuestion);
         fragmentTransaction.replace(R.id.content_frame, questionFragment);
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         fragmentTransaction.commit();
     }
 
     public void showAnswer(int guess) {
-        if(questions.get(questionCount).isCorrect(guess)){
+        if(currentQuestion.isCorrect(guess)){
             numCorrect++;
         }
+
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        AnswerFragment answerFragment = AnswerFragment.newInstance(questions.get(questionCount).getAnswers()[guess], questions.get(questionCount).getCorrectAnswer(), numCorrect, questions.size(), questions.size() > questionCount);
+        fragmentTransaction.setCustomAnimations(R.animator.slide_in_left, R.animator.slide_out_left);
+        AnswerFragment answerFragment = AnswerFragment.newInstance(currentQuestion.getAnswers()[guess], currentQuestion.getCorrectAnswer(), numCorrect, numQuestions, !questions.isEmpty());
         fragmentTransaction.replace(R.id.content_frame, answerFragment);
         fragmentTransaction.commit();
     }

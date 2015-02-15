@@ -3,7 +3,6 @@ package edu.washington.robbybro.quizdroid;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 
 public class SelectTopicActivity extends ActionBarActivity {
@@ -36,7 +34,6 @@ public class SelectTopicActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent nextActivity = new Intent(SelectTopicActivity.this, TopicDetailActivity.class);
-                nextActivity.putExtra("timestamp", new Date().toString());
                 String selectedFromList = (String) (topicsView.getItemAtPosition(position));
                 nextActivity.putExtra("topic", selectedFromList);
                 startActivity(nextActivity);

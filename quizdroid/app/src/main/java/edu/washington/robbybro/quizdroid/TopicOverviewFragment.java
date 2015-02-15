@@ -11,8 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class TopicOverviewFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "topic";
     private static final String ARG_PARAM2 = "numQuestions";
 
@@ -20,12 +19,6 @@ public class TopicOverviewFragment extends Fragment {
     private int numQuestions;
     private TopicDetailActivity topicDetailActivity;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     * @return A new instance of fragment TopicOverviewFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static TopicOverviewFragment newInstance(String topic, int numQuestions) {
         TopicOverviewFragment fragment = new TopicOverviewFragment();
         Bundle args = new Bundle();
