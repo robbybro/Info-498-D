@@ -10,6 +10,7 @@ public class Topic implements Serializable {
     private String topic;
     private String descriptionShort;
     private String descriptionLong;
+    private int currentQuestionUserIsOn;
     private ArrayList<Question> questions;
 
     public Topic() {
@@ -21,6 +22,8 @@ public class Topic implements Serializable {
         this.descriptionShort = descriptionShort;
         this.descriptionLong = descriptionLong;
         this.questions = questions;
+
+        this.currentQuestionUserIsOn = 0;
     }
 
     public String getTopic() {
@@ -55,7 +58,24 @@ public class Topic implements Serializable {
         this.questions = questions;
     }
 
-    public int getQuestionSize () {
+    public void addQuestion(Question q) {
+        questions.add(q);
+    }
+
+    public int totalQuestionCount () {
         return this.questions.size();
+    }
+
+    public int getCurrentQuestionUserIsOn() {
+        return currentQuestionUserIsOn;
+    }
+
+    public Question getQuestion(int index) {
+        return questions.get(index);
+    }
+
+    public int setCurrentQuestion(int index){
+        currentQuestionUserIsOn = index;
+        return currentQuestionUserIsOn;
     }
 }

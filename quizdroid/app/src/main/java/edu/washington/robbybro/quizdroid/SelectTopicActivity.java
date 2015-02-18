@@ -33,7 +33,7 @@ public class SelectTopicActivity extends ActionBarActivity {
         topicsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent nextActivity = new Intent(SelectTopicActivity.this, TopicDetailActivity.class);
+                Intent nextActivity = new Intent(SelectTopicActivity.this, QuizActivity.class);
                 String selectedFromList = (String) (topicsView.getItemAtPosition(position));
                 nextActivity.putExtra("topic", selectedFromList);
                 startActivity(nextActivity);

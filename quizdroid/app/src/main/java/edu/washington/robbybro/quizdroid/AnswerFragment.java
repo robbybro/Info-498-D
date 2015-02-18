@@ -23,7 +23,7 @@ public class AnswerFragment extends Fragment {
     private int numCorrect;
     private int numQuestions;
     private boolean moreQuestions;
-    private TopicDetailActivity topicDetailActivity;
+    private QuizActivity quizActivity;
 
     public static AnswerFragment newInstance(String yourAnswer, String correctAnswer, int numCorrect, int numQuestions, boolean moreQuestions) {
         AnswerFragment fragment = new AnswerFragment();
@@ -76,9 +76,13 @@ public class AnswerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (moreQuestions){
-                    topicDetailActivity.showNextQuestion();
+                    // TODO
+                    QuizApp app = QuizApp.getInstance();
+                    app.setCurrentQuestion(app.getCurrentQuestionUserIsOn()+1);
+                    quizActivity.showNextQuestion();
+
                 } else {
-                    topicDetailActivity.finish();
+                    quizActivity.finish();
                 }
             }
         });
@@ -89,7 +93,7 @@ public class AnswerFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        topicDetailActivity = (TopicDetailActivity) getActivity();
+        quizActivity = (QuizActivity) getActivity();
     }
 
     @Override

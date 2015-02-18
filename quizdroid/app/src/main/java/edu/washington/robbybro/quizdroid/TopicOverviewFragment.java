@@ -1,7 +1,6 @@
 package edu.washington.robbybro.quizdroid;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,7 +16,7 @@ public class TopicOverviewFragment extends Fragment {
 
     private String topic;
     private int numQuestions;
-    private TopicDetailActivity topicDetailActivity;
+    private QuizActivity quizActivity;
 
     public static TopicOverviewFragment newInstance(String topic, int numQuestions) {
         TopicOverviewFragment fragment = new TopicOverviewFragment();
@@ -47,14 +46,15 @@ public class TopicOverviewFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_topic_overview, container, false);
         ((TextView)rootView.findViewById(R.id.topic_title)).setText(topic);
-        ((TextView)rootView.findViewById(R.id.topic_description)).setText(getTopicDetails(topic));
+
+        ((TextView)rootView.findViewById(R.id.topic_description)).setText(QuizApp.getInstance().getDescriptionLong());
         ((TextView)rootView.findViewById(R.id.question_count)).setText(getString(R.string.num_questions, numQuestions));
 
         Button begin = (Button) rootView.findViewById(R.id.btn_begin);
         begin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                topicDetailActivity.showNextQuestion();
+                quizActivity.showNextQuestion();
             }
         });
 
@@ -64,25 +64,12 @@ public class TopicOverviewFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        topicDetailActivity = (TopicDetailActivity) activity;
+        quizActivity = (QuizActivity) activity;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-    }
-
-    private String getTopicDetails(String topic){
-        switch (topic){
-            case "Math":
-                return "The universal language";
-            case "Physics":
-                return "math with application";
-            case "Marvel Super Heroes":
-                return "Not DC";
-            default:
-                return "";
-        }
     }
 
 }

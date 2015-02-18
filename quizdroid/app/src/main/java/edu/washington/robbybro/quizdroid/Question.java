@@ -3,6 +3,7 @@ package edu.washington.robbybro.quizdroid;
 import android.util.Log;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by Robby on 2/4/2015.
@@ -10,9 +11,9 @@ import java.io.Serializable;
 public class Question implements Serializable {
     private int correct;
     private String question;
-    private String[] answers;
+    private ArrayList<String> answers;
 
-    public Question(String question, String[] answers, int correct) {
+    public Question(String question, ArrayList<String> answers, int correct) {
         this.correct = correct;
         this.question = question;
         this.answers = answers;
@@ -22,13 +23,13 @@ public class Question implements Serializable {
         return this.question;
     }
 
-    public String[] getAnswers(){
+    public ArrayList<String> getAnswers(){
         return this.answers;
     }
 
     public String getCorrectAnswer(){
-        Log.i("quiz", this.answers[this.correct]);
-        return this.answers[this.correct];
+        Log.i("quiz", this.answers.get(this.correct));
+        return this.answers.get(this.correct);
     }
 
     public boolean isCorrect(int guess){

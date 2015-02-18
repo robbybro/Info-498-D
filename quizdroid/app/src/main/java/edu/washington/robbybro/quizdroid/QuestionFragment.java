@@ -1,7 +1,6 @@
 package edu.washington.robbybro.quizdroid;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -13,22 +12,26 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
 public class QuestionFragment extends Fragment {
     private static final String ARG_PARAM1 = "question";
+    private static int questionIndex;
 
     private Question question;
-    private TopicDetailActivity topicDetailActivity;
+    private QuizActivity quizActivity;
 
-    public static QuestionFragment newInstance(Question question) {
+    public static QuestionFragment newInstance(int currentQuestionIndex, Question question) {
         QuestionFragment fragment = new QuestionFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_PARAM1, question);
         fragment.setArguments(args);
-        Log.i("quiz", "Question: " + question.getQuestion());
-        Log.i("quiz", "Answers: " + Arrays.toString(question.getAnswers()));
+        questionIndex =  currentQuestionIndex;
+
+        Log.i("quizActivity", "Question: " + question.getQuestion());
+        Log.i("quizActivity", "Answers: " + question.getAnswers().toString());
         return fragment;
     }
 
@@ -53,7 +56,7 @@ public class QuestionFragment extends Fragment {
         TextView questionTextView = (TextView) view.findViewById(R.id.question);
         questionTextView.setText(question.getQuestion());
 
-        String[] choices = question.getAnswers();
+        ArrayList<String> choices = question.getAnswers();
 
         //Submit button
         Button submit = (Button) view.findViewById(R.id.submit_btn);
@@ -64,7 +67,7 @@ public class QuestionFragment extends Fragment {
                 //Check to see if answer was correct
                 RadioGroup rg = (RadioGroup) view.findViewById(R.id.choicesGroup);
                 View rb = rg.findViewById(rg.getCheckedRadioButtonId());
-                topicDetailActivity.showAnswer(rg.indexOfChild(rb));
+                quizActivity.showAnswer(rg.indexOfChild(rb));
             }
         });
 
@@ -79,20 +82,20 @@ public class QuestionFragment extends Fragment {
 
         //Buttons
         RadioButton a1 = (RadioButton) view.findViewById(R.id.choice1);
-        a1.setText(choices[0]);
+        a1.setText(choices.get(0));
         a1.setOnClickListener(selectAnswer);
 
         RadioButton a2 = (RadioButton) view.findViewById(R.id.choice2);
         a2.setOnClickListener(selectAnswer);
-        a2.setText(choices[1]);
+        a2.setText(choices.get(1));
 
         RadioButton a3 = (RadioButton) view.findViewById(R.id.choice3);
         a3.setOnClickListener(selectAnswer);
-        a3.setText(choices[2]);
+        a3.setText(choices.get(2));
 
         RadioButton a4 = (RadioButton) view.findViewById(R.id.choice4);
         a4.setOnClickListener(selectAnswer);
-        a4.setText(choices[3]);
+        a4.setText(choices.get(3));
 
         return view;
     }
@@ -100,7 +103,7 @@ public class QuestionFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        topicDetailActivity = (TopicDetailActivity) activity;
+        quizActivity = (QuizActivity) activity;
     }
 
     @Override
