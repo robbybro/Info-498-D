@@ -4,7 +4,6 @@ import android.app.Application;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +13,7 @@ import java.util.Map;
 public class QuizApp extends Application implements TopicRepository {
 
     private static QuizApp instance;
-    private Topic[] topics;
+    private ArrayList<Topic> topics;
     private int currentTopic;
 
     public QuizApp() {
@@ -34,6 +33,7 @@ public class QuizApp extends Application implements TopicRepository {
         Map<String, ArrayList<Question>> questions = new HashMap<>();
         ArrayList<Question> questionTemp = new ArrayList<Question>();
         ArrayList<String> answerTemp = new ArrayList<String>();
+        topics = new ArrayList<Topic>();
 
         // Math
         Topic math  = new Topic();
@@ -106,7 +106,9 @@ public class QuizApp extends Application implements TopicRepository {
         questions.put("Marvel Super Heroes", questionTemp);
         marvel.setQuestions(questionTemp);
 
-        topics = new Topic[]{math, physics, marvel};
+        topics.add(math);
+        topics.add(physics);
+        topics.add(marvel);
     }
 
     @Override
@@ -123,13 +125,17 @@ public class QuizApp extends Application implements TopicRepository {
 
     @Override
     public String getTopicAt(int index){
-        return topics[index].getTopic();
+        return topics.get(index).getTopic();
 
+    }
+
+    public ArrayList<Topic> getTopics() {
+        return this.topics;
     }
 
     @Override
     public String getCorrectAnswer(){
-        return getQuestion(topics[currentTopic].totalQuestionCount()).getCorrectAnswer();
+        return getQuestion(topics.get(currentTopic).totalQuestionCount()).getCorrectAnswer();
     }
 
     @Override
@@ -143,56 +149,56 @@ public class QuizApp extends Application implements TopicRepository {
     }
 
     public String getTopic(){
-        return topics[currentTopic].getTopic();
+        return topics.get(currentTopic).getTopic();
     }
 
     @Override
     public void setTopic(int index){
-        topics[currentTopic].setTopic(getTopicAt(index));
+        topics.get(currentTopic).setTopic(getTopicAt(index));
     }
 
     @Override
     public String getDescriptionLong(){
-        return topics[currentTopic].getDescriptionLong();
+        return topics.get(currentTopic).getDescriptionLong();
     }
 
     @Override
     public void setDescriptionLong(String description){
-        topics[currentTopic].setDescriptionLong(description);
+        topics.get(currentTopic).setDescriptionLong(description);
     }
 
     @Override
     public void setDescriptionShort(String descriptionShort){
-        topics[currentTopic].setDescriptionShort(descriptionShort);
+        topics.get(currentTopic).setDescriptionShort(descriptionShort);
     }
 
     @Override
     public int getCurrentQuestion(){
-        return topics[currentTopic].getCurrentQuestionUserIsOn();
+        return topics.get(currentTopic).getCurrentQuestionUserIsOn();
     }
 
     public int getCurrentQuestionUserIsOn(){
-        return topics[currentTopic].getCurrentQuestionUserIsOn();
+        return topics.get(currentTopic).getCurrentQuestionUserIsOn();
     }
 
     @Override
     public void addQuestion(Question question){
-        topics[currentTopic].addQuestion(question);
+        topics.get(currentTopic).addQuestion(question);
     }
 
     @Override
     public void setCurrentQuestion(int index){
-        topics[currentTopic].setCurrentQuestion(index);
+        topics.get(currentTopic).setCurrentQuestion(index);
     }
 
     @Override
     public int totalQuestionCount(){
-        return topics[currentTopic].totalQuestionCount();
+        return topics.get(currentTopic).totalQuestionCount();
     }
 
     @Override
     public Question getQuestion(int index){
-        return topics[currentTopic].getQuestion(index);
+        return topics.get(currentTopic).getQuestion(index);
     }
 
     public int getQuestionIndex(Question q) {
@@ -201,7 +207,7 @@ public class QuizApp extends Application implements TopicRepository {
 
     @Override
     public ArrayList<Question> getQuestionList() {
-        return topics[currentTopic].getQuestions();
+        return topics.get(currentTopic).getQuestions();
     }
 
 }

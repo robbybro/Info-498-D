@@ -15,17 +15,17 @@ import java.util.ArrayList;
 
 public class SelectTopicActivity extends ActionBarActivity {
 
-    private ArrayList<String> topics = new ArrayList<String>();
+    private ArrayList<Topic> topics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_topics);
+        QuizApp app = QuizApp.getInstance();
+        topics = new ArrayList<Topic>();
+        topics = app.getTopics();
+        TopicsListAdapter topicsAdapter = new TopicsListAdapter(this, R.layout.topics_list_layout, topics);
 
-        ArrayAdapter<String> topicsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, topics);
-        topics.add("Math");
-        topics.add("Physics");
-        topics.add("Marvel Super Heroes");
 
         final ListView topicsView = (ListView) findViewById(R.id.topics);
         topicsView.setAdapter(topicsAdapter);
@@ -34,7 +34,7 @@ public class SelectTopicActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent nextActivity = new Intent(SelectTopicActivity.this, QuizActivity.class);
-                String selectedFromList = (String) (topicsView.getItemAtPosition(position));
+                Topic selectedFromList = (Topic) (topicsView.getItemAtPosition(position));
                 nextActivity.putExtra("topic", selectedFromList);
                 startActivity(nextActivity);
                 finish();

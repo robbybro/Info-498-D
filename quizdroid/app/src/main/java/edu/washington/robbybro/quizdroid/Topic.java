@@ -12,6 +12,8 @@ public class Topic implements Serializable {
     private String descriptionLong;
     private int currentQuestionUserIsOn;
     private ArrayList<Question> questions;
+    private int imageResource;
+
 
     public Topic() {
         this("", "", "", new ArrayList<Question>());
@@ -22,6 +24,16 @@ public class Topic implements Serializable {
         this.descriptionShort = descriptionShort;
         this.descriptionLong = descriptionLong;
         this.questions = questions;
+
+        this.currentQuestionUserIsOn = 0;
+    }
+
+    public Topic(String topic, String descriptionShort, String descriptionLong, ArrayList<Question> questions, int imageResource) {
+        this.topic = topic;
+        this.descriptionShort = descriptionShort;
+        this.descriptionLong = descriptionLong;
+        this.questions = questions;
+        this.imageResource = imageResource;
 
         this.currentQuestionUserIsOn = 0;
     }
@@ -77,5 +89,9 @@ public class Topic implements Serializable {
     public int setCurrentQuestion(int index){
         currentQuestionUserIsOn = index;
         return currentQuestionUserIsOn;
+    }
+
+    public int getImageResource(){
+        return this.imageResource;
     }
 }
