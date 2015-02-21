@@ -1,8 +1,11 @@
 package edu.washington.robbybro.arewethereyet;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,6 +18,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Handler;
+
 import static java.lang.Integer.parseInt;
 
 
@@ -23,6 +30,7 @@ public class MainActivity extends ActionBarActivity implements TextWatcher {
     private TextView phoneNumber;
     private TextView minutes;
     private Button startStop;
+    private PendingIntent pendingIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,35 +48,57 @@ public class MainActivity extends ActionBarActivity implements TextWatcher {
         phoneNumber.addTextChangedListener(this);
         minutes.addTextChangedListener(this);
 
-        // TODO: make
+        /* Retrieve a PendingIntent that will perform a broadcast */
+        Intent alarmIntent = new Intent(MainActivity.this, AlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarmIntent, 0);
+
+        startStop.setText("Start");
+
         startStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(startStop.getText().toString() == "Start") {
+                String buttonText = startStop.getText().toString();
+                if(buttonText == "Start") {
+                    // Start alarm manager
                     startStop.setText("Stop");
-                    Log.i("arewethereyet", "Texting started");
+                    Log.i("awty", "Texting started");
 
-//                    Context context = getApplicationContext();
-//                    final CharSequence text = message.getText();
-//                    final int duration = Toast.LENGTH_SHORT;
-//                    // TODO: create intentBroadcast
-//                    Intent i = new Intent();
-//                    BroadcastReceiver br = new BroadcastReceiver() {
-//                        @Override
-//                        public void onReceive(Context context, Intent intent) {
-//                            Toast toast = Toast.makeText(context, text, duration);
-//                            toast.show();
-//                        }
-//                    };
-
-
+                    start();
                 } else {
+                    // STop alarm manager
                     startStop.setText("Start");
+                    Log.i("awty", "Texting Stopped");
+
+                    cancel();
                 }
             }
         });
+    }
+
+    public void start() {
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        int interval = parseInt(minutes.getText().toString());
+
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * interval, pendingIntent);
+        Toast.makeText(this, "Texting Set", Toast.LENGTH_SHORT).show();
+    }
+
+    public void cancel() {
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        manager.cancel(pendingIntent);
+        Toast.makeText(this, "Texting Canceled", Toast.LENGTH_SHORT).show();
+    }
 
 
+    public class AlarmReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final CharSequence text = message.getText();
+            final int duration = Toast.LENGTH_LONG;
+            Log.i("awty", "alarm fired");
+            Toast.makeText(context, text, duration).show();
+        }
     }
 
 
