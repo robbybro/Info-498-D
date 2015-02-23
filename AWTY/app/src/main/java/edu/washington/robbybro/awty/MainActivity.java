@@ -90,7 +90,7 @@ public class MainActivity extends ActionBarActivity implements TextWatcher {
     }
 
     public void start() {
-        int interval = parseInt(minutes.getText().toString()) * 1000;
+        int interval = parseInt(minutes.getText().toString()) * 1000 * 60;
 
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
