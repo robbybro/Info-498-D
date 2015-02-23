@@ -1,11 +1,15 @@
-package edu.washington.robbybro.arewethereyet;
+package edu.washington.robbybro.awty;
+
+import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,19 +22,18 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.logging.Handler;
-
 import static java.lang.Integer.parseInt;
 
-
 public class MainActivity extends ActionBarActivity implements TextWatcher {
+    public static final int INTENT_ID = 1;
+
     private TextView message;
     private TextView phoneNumber;
     private TextView minutes;
     private Button startStop;
     private PendingIntent pendingIntent;
+//    private boolean started;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,27 +51,38 @@ public class MainActivity extends ActionBarActivity implements TextWatcher {
         phoneNumber.addTextChangedListener(this);
         minutes.addTextChangedListener(this);
 
-        /* Retrieve a PendingIntent that will perform a broadcast */
-        Intent alarmIntent = new Intent(MainActivity.this, AlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarmIntent, 0);
+        // Retrieve a PendingIntent that will perform a broadcast
+        // check to see if alarm already exists
+//        started = (PendingIntent.getBroadcast(MainActivity.this, INTENT_ID, alarmIntent,
+//                PendingIntent.FLAG_NO_CREATE) != null);
 
+//        if (started) { //If alarm already exists
+//            pendingIntent = PendingIntent.getBroadcast(MainActivity.this, MainActivity.INTENT_ID, alarmIntent, PendingIntent.FLAG_NO_CREATE);
+//            Toast.makeText(MainActivity.this, "Alarm already exists", Toast.LENGTH_SHORT).show();
+//            startStop.setText("Stop");
+//        } else {
         startStop.setText("Start");
+//        }
 
         startStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Retrieve a PendingIntent that will perform a broadcast
+                Intent alarmIntent = new Intent(MainActivity.this, AlarmReceiver.class);
+                alarmIntent.putExtra("message", phoneNumber.getText() + ": " + message.getText());
+                pendingIntent = PendingIntent.getBroadcast(MainActivity.this, INTENT_ID,
+                        alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
                 String buttonText = startStop.getText().toString();
                 if(buttonText == "Start") {
-                    // Start alarm manager
-                    startStop.setText("Stop");
+                    // Start alarm
                     Log.i("awty", "Texting started");
-
+                    startStop.setText("Stop");
                     start();
                 } else {
                     // STop alarm manager
                     startStop.setText("Start");
                     Log.i("awty", "Texting Stopped");
-
                     cancel();
                 }
             }
@@ -76,31 +90,19 @@ public class MainActivity extends ActionBarActivity implements TextWatcher {
     }
 
     public void start() {
-        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        int interval = parseInt(minutes.getText().toString());
+        int interval = parseInt(minutes.getText().toString()) * 1000;
 
-        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * interval, pendingIntent);
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
         Toast.makeText(this, "Texting Set", Toast.LENGTH_SHORT).show();
     }
 
     public void cancel() {
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         manager.cancel(pendingIntent);
+        pendingIntent.cancel();
         Toast.makeText(this, "Texting Canceled", Toast.LENGTH_SHORT).show();
     }
-
-
-    public class AlarmReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final CharSequence text = message.getText();
-            final int duration = Toast.LENGTH_LONG;
-            Log.i("awty", "alarm fired");
-            Toast.makeText(context, text, duration).show();
-        }
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -139,6 +141,12 @@ public class MainActivity extends ActionBarActivity implements TextWatcher {
         validateFields();
     }
 
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
     /**
      * Check:
      * Message is not empty
@@ -146,7 +154,8 @@ public class MainActivity extends ActionBarActivity implements TextWatcher {
      * minutes is valid - no 0's, no negatives, must be integer
      */
     private Boolean validateFields() {
-        if(message.getText().length() > 0 && phoneNumber.getText().length() > 0 && minutes.getText().length() > 0 && parseInt(minutes.getText().toString()) > 0) {
+        if(message.getText().length() > 0 && phoneNumber.getText().length() > 0
+                && minutes.getText().length() > 0 && parseInt(minutes.getText().toString()) > 0) {
             startStop.setClickable(true);
             startStop.setEnabled(true);
 
@@ -156,5 +165,17 @@ public class MainActivity extends ActionBarActivity implements TextWatcher {
             startStop.setEnabled(false);
             return false;
         }
+    }
+
+    //    TODO: gonna use this to validate phone numbers on the next assignment
+    private static boolean validatePhoneNumber(String phoneNo) {
+        //validate phone numbers of format "1234567890"
+        if (phoneNo.matches("\\d{10}")) return true;
+            //validating phone number with -, . or spaces
+        else if(phoneNo.matches("\\d{3}[-\\.\\s]\\d{3}[-\\.\\s]\\d{4}")) return true;
+            //validating phone number where area code is in braces ()
+        else if(phoneNo.matches("\\(\\d{3}\\)-\\d{3}-\\d{4}")) return true;
+            //return false if nothing matches the input
+        else return false;
     }
 }
