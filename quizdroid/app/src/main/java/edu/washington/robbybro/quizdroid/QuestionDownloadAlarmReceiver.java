@@ -12,6 +12,7 @@ public class QuestionDownloadAlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "Downloading New Questions", Toast.LENGTH_SHORT).show();
+        String url = intent.getStringExtra("url");
+        Toast.makeText(context, "Downloading New Questions from " + url, Toast.LENGTH_SHORT).show();
     }
 }
