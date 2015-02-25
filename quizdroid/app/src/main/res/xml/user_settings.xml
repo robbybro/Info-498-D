@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="Settings" >
+        <EditTextPreference
+            android:title="Update URL"
+            android:summary="URL to pull questions from"
+            android:key="prefUpdateURL"
+            android:inputType="textUri"/>
+        <EditTextPreference
+            android:title="Update Interval"
+            android:summary="How often to update questions"
+            android:key="prefUpdateInterval"
+            android:inputType="number"/>
+    </PreferenceCategory>
+</PreferenceScreen>

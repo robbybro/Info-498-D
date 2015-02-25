@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.washington.robbybro.quizdroid" >
+
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
+        android:name=".QuizApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:name=".QuizApp">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".SelectTopicActivity"
             android:label="@string/app_name" >
@@ -21,6 +23,17 @@
             android:name=".QuizActivity"
             android:label="@string/title_activity_topic_detail" >
         </activity>
+
+        <service
+            android:name=".QuestionDownloadIntentService"
+            android:exported="false" />
+
+        <activity
+            android:name=".PreferencesActivity"
+            android:label="@string/title_activity_preferences" >
+        </activity>
+        <receiver
+            android:name=".QuestionDownloadAlarmReceiver" />
     </application>
 
 </manifest>
