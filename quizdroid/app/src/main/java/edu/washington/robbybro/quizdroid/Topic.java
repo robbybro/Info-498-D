@@ -2,6 +2,7 @@ package edu.washington.robbybro.quizdroid;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Robby on 2/11/2015.
@@ -11,7 +12,7 @@ public class Topic implements Serializable {
     private String descriptionShort;
     private String descriptionLong;
     private int currentQuestionUserIsOn;
-    private ArrayList<Question> questions;
+    private List<Question> questions;
     private int imageResource;
 
 
@@ -19,7 +20,7 @@ public class Topic implements Serializable {
         this("", "", "", new ArrayList<Question>());
     }
 
-    public Topic(String topic, String descriptionShort, String descriptionLong, ArrayList<Question> questions) {
+    public Topic(String topic, String descriptionShort, String descriptionLong, List<Question> questions) {
         this.topic = topic;
         this.descriptionShort = descriptionShort;
         this.descriptionLong = descriptionLong;
@@ -28,7 +29,7 @@ public class Topic implements Serializable {
         this.currentQuestionUserIsOn = 0;
     }
 
-    public Topic(String topic, String descriptionShort, String descriptionLong, ArrayList<Question> questions, int imageResource) {
+    public Topic(String topic, String descriptionShort, String descriptionLong, List<Question> questions, int imageResource) {
         this.topic = topic;
         this.descriptionShort = descriptionShort;
         this.descriptionLong = descriptionLong;
@@ -62,7 +63,7 @@ public class Topic implements Serializable {
         this.descriptionLong = descriptionLong;
     }
 
-    public ArrayList<Question> getQuestions() {
+    public List<Question> getQuestions() {
         return this.questions;
     }
 

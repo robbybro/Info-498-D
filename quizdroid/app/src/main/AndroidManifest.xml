@@ -24,16 +24,14 @@
             android:label="@string/title_activity_topic_detail" >
         </activity>
 
-        <service
-            android:name=".QuestionDownloadIntentService"
-            android:exported="false" />
-
         <activity
             android:name=".PreferencesActivity"
             android:label="@string/title_activity_preferences" >
         </activity>
         <receiver
             android:name=".QuestionDownloadAlarmReceiver" />
+        <service android:name=".DownloadService"/>
+
     </application>
 
 </manifest>

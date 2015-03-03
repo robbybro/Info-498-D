@@ -25,11 +25,11 @@ public class AnswerFragment extends Fragment {
     private boolean moreQuestions;
     private QuizActivity quizActivity;
 
-    public static AnswerFragment newInstance(String yourAnswer, String correctAnswer, int numCorrect, int numQuestions, boolean moreQuestions) {
+    public static AnswerFragment newInstance(String yourAnswer, int correctAnswer, int numCorrect, int numQuestions, boolean moreQuestions) {
         AnswerFragment fragment = new AnswerFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, yourAnswer);
-        args.putString(ARG_PARAM2, correctAnswer);
+        args.putInt(ARG_PARAM2, correctAnswer);
         args.putInt(ARG_PARAM3, numCorrect);
         args.putInt(ARG_PARAM4, numQuestions);
         args.putBoolean(ARG_PARAM5, moreQuestions);

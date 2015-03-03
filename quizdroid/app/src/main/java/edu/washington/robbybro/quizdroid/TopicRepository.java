@@ -19,7 +19,7 @@ public interface TopicRepository {
     public int getCurrentQuestion();
     public void setCurrentQuestion(int index);
 
-    public String getCorrectAnswer();
+    public int getCorrectAnswer();
     public void setCorrectAnswer(int index);
     public ArrayList<String> getAnswerList();
 

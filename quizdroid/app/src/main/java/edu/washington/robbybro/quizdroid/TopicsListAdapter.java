@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Robby on 2/17/2015.
@@ -17,9 +18,9 @@ import java.util.ArrayList;
 public class TopicsListAdapter extends ArrayAdapter<Topic>{
     Context context;
     int layoutResourceId;
-    ArrayList<Topic> data = null;
+    List<Topic> data = null;
 
-    public TopicsListAdapter(Context context, int layoutResourceId, ArrayList<Topic> data) {
+    public TopicsListAdapter(Context context, int layoutResourceId, List<Topic> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;

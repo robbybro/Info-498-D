@@ -12,20 +12,20 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class SelectTopicActivity extends ActionBarActivity {
 
-    private ArrayList<Topic> topics;
+    private List<Topic> topics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_topics);
         QuizApp app = QuizApp.getInstance();
-        topics = new ArrayList<Topic>();
         topics = app.getTopics();
-        TopicsListAdapter topicsAdapter = new TopicsListAdapter(this, R.layout.topics_list_layout, topics);
+        TopicsListAdapter topicsAdapter = new TopicsListAdapter(this, R.layout.topics_list_layout, QuizApp.getInstance().getTopics());
 
 
         final ListView topicsView = (ListView) findViewById(R.id.topics);
@@ -34,11 +34,9 @@ public class SelectTopicActivity extends ActionBarActivity {
         topicsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent nextActivity = new Intent(SelectTopicActivity.this, QuizActivity.class);
-                Topic selectedFromList = (Topic) (topicsView.getItemAtPosition(position));
-                nextActivity.putExtra("topic", selectedFromList);
-                startActivity(nextActivity);
-                finish();
+                Intent questionIntent = new Intent(SelectTopicActivity.this, QuizActivity.class);
+                questionIntent.putExtra("topic", position);
+                startActivity(questionIntent);
             }
         });
     }
@@ -58,5 +56,13 @@ public class SelectTopicActivity extends ActionBarActivity {
             startActivity(nextActivity);
         }
         return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (DownloadService.isServiceAlarmOn(this))
+            DownloadService.setServiceAlarm(this, false);
     }
 }

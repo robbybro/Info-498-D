@@ -14,13 +14,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 public class QuestionFragment extends Fragment {
     private static final String ARG_PARAM1 = "question";
     private static int questionIndex;
 
-    private Question question;
+    private static Question question;
     private QuizActivity quizActivity;
 
     public static QuestionFragment newInstance(int currentQuestionIndex, Question question) {
@@ -29,9 +30,9 @@ public class QuestionFragment extends Fragment {
         args.putSerializable(ARG_PARAM1, question);
         fragment.setArguments(args);
         questionIndex =  currentQuestionIndex;
-
-        Log.i("quizActivity", "Question: " + question.getQuestion());
-        Log.i("quizActivity", "Answers: " + question.getAnswers().toString());
+        QuestionFragment.question = question;
+//        Log.i("quizActivity", "Question: " + question.getQuestion());
+//        Log.i("quizActivity", "Answers: " + question.getAnswers().toString());
         return fragment;
     }
 
@@ -54,9 +55,9 @@ public class QuestionFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_question, container, false);
 
         TextView questionTextView = (TextView) view.findViewById(R.id.question);
-        questionTextView.setText(question.getQuestion());
+        questionTextView.setText(question.getQuestionText());
 
-        ArrayList<String> choices = question.getAnswers();
+        List<String> choices = question.getAnswers();
 
         //Submit button
         Button submit = (Button) view.findViewById(R.id.submit_btn);

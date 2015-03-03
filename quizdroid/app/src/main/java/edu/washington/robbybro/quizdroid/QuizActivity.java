@@ -20,6 +20,7 @@ public class QuizActivity extends ActionBarActivity {
     private int numCorrect;
     public int numQuestions;
     private FragmentManager fragmentManager;
+    QuizApp instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,22 +29,24 @@ public class QuizActivity extends ActionBarActivity {
 
         // Get the Intent that opened this activity
         Intent launchedMe = getIntent();
-        final String topic = launchedMe.getStringExtra("topic");
-        setTitle(topic);
 
-        questions = QuizApp.getInstance().getQuestionList();
+        instance = QuizApp.getInstance();
+
+        setTitle(instance.getTopic());
+
+        questions = instance.getQuestionList();
         numQuestions = questions.size();
         fragmentManager = getFragmentManager();
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        TopicOverviewFragment topicDetailFragment = TopicOverviewFragment.newInstance(topic, numQuestions);
+        TopicOverviewFragment topicDetailFragment = TopicOverviewFragment.newInstance(instance.getTopic(), numQuestions);
         fragmentTransaction.replace(R.id.content_frame, topicDetailFragment);
         fragmentTransaction.commit();
     }
 
     public void showNextQuestion() {
-        currentQuestionIndex = QuizApp.getInstance().getCurrentQuestion();
-        currentQuestion = QuizApp.getInstance().getQuestionList().get(currentQuestionIndex);
+        currentQuestionIndex = instance.getCurrentQuestion();
+        currentQuestion = instance.getQuestionList().get(currentQuestionIndex);
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.animator.slide_in_left, R.animator.slide_out_left);

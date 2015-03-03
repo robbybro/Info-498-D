@@ -89,7 +89,7 @@ public class PreferencesActivity
     }
 
     public void setQuestionDownloadAlarm(String url, int interval) {
-        interval = interval * 1000; // converting from ms to s
+        interval = interval * 1000 * 60; // converting from ms to m
 
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
